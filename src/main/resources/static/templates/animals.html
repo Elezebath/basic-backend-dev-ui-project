@@ -1,21 +1,5 @@
 <!DOCTYPE html>
-<!--
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║  TASK A — ADD THYMELEAF                                          ║
-  ╠══════════════════════════════════════════════════════════════════╣
-  ║  This is a plain static HTML file — the animal list is           ║
-  ║  hard-coded and the form does not work yet.                      ║
-  ║                                                                  ║
-  ║  Your job:          ║         ║                ║    ║                          ║
-  ║                                                                  ║
-  ║  ROLE-BASED UI (adoption feature — see SecurityConfig):          ║
-  ║                                                                          ║
-  ║ 10. When isAdmin is true and the animal is ADOPTED, display its  ║
-  ║     adoptionNote (already computed server-side in                ║
-  ║     AnimalResponse) next to the status — everyone else just      ║
-  ║     sees the bare "ADOPTED" status.                              ║
-  ╚══════════════════════════════════════════════════════════════════╝
--->
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -106,6 +90,7 @@
         button:hover {
             background: #1d4ed8;
         }
+        .validation-error { color: #dc2626; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -114,6 +99,7 @@
     <a th:href="@{/}">Home</a>
     <a th:href="@{/animals}">All animals</a>
     <a th:if="${isAdmin}" th:href="@{/animals/new}">Add animal</a>
+    <a th:href="@{/swagger-ui/index.html}">Swagger UI</a>
 </nav>
 <main>
     <h1>Shelter Animals</h1>
@@ -153,33 +139,34 @@
         <form th:action="@{/animals}" th:object="${animalForm}" method="post">
 
             <label for="name">Name</label>
-            <input id="name" th:field="*{name}" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" type="text"
+            <input id="name" th:field="*{name}" type="text"
                    required placeholder="e.g. Milo">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validation-error"></span>
 
             <label for="type">Type</label>
-            <select id="type" th:field="*{type}" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">
+            <select id="type" th:field="*{type}">
                 <option value="">— choose —</option>
                 <option value="CAT">Cat</option>
                 <option value="DOG">Dog</option>
                 <option value="OTHER">Other</option>
             </select>
+            <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="validation-error"></span>
 
             <label for="breed">Breed</label>
-            <input id="breed" th:field="*{breed}" th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}" type="text"
+            <input id="breed" th:field="*{breed}" type="text"
                    placeholder="e.g. Siamese">
 
             <label for="age">Age (years)</label>
-            <input id="age" th:field="*{age}" th:if="${#fields.hasErrors('age')}" th:errors="*{age}" type="number"
+            <input id="age" th:field="*{age}" type="number"
                    min="0" placeholder="e.g. 3">
+            <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="validation-error"></span>
 
             <label for="description">Description</label>
-            <textarea id="description" th:field="*{description}" th:if="${#fields.hasErrors('description')}"
-                      th:errors="*{description}" rows="3"
+            <textarea id="description" th:field="*{description}" rows="3"
                       placeholder="A short description of the animal's personality"></textarea>
 
             <label for="imageUrl">Image filename</label>
-            <input id="imageUrl" th:field="*{imageUrl}" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"
-                   type="text"
+            <input id="imageUrl" th:field="*{imageUrl}" type="text"
                    placeholder="luna.jpg">
 
             <button type="submit">Add animal</button>

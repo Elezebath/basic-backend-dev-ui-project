@@ -16,6 +16,7 @@
     button { padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; width: fit-content; }
     button:hover { background: #1d4ed8; }
     .back-link { display: inline-block; margin-top: 1rem; color: #2563eb; }
+    .validation-error { color: #dc2626; font-size: 0.85rem; }
   </style>
 </head>
 <body  th:if="${isAdmin}">
@@ -25,36 +26,40 @@
     <a th:href="@{/}">Home</a>
     <a th:href="@{/animals}">All animals</a>
     <a th:href="@{/animals/new}">Add animal</a>
+    <a th:href="@{/swagger-ui/index.html}">Swagger UI</a>
   </nav>
 
   <main>
     <h1>Add a new animal</h1>
 
-    <form th:action="@{/animals}" th:object="${form}" method="post">
+    <form th:action="@{/animals}" th:object="${animalForm}" method="post">
 
       <label for="name">Name</label>
-      <input id="name" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:field="*{name}" type="text" required placeholder="e.g. Milo">
+      <input id="name" th:field="*{name}" type="text" required placeholder="e.g. Milo">
+      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validation-error"></span>
 
       <label for="type">Type</label>
-      <select id="type" th:if="${#fields.hasErrors('type')}" th:errors="*{type}" th:field="*{type}">
+      <select id="type" th:field="*{type}">
         <option value="">— choose —</option>
         <option value="CAT">Cat</option>
         <option value="DOG">Dog</option>
         <option value="OTHER">Other</option>
       </select>
+      <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="validation-error"></span>
 
       <label for="breed">Breed</label>
-      <input id="breed" th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}" th:field="*{breed}" type="text" placeholder="e.g. Siamese">
+      <input id="breed" th:field="*{breed}" type="text" placeholder="e.g. Siamese">
 
       <label for="age">Age (years)</label>
-      <input id="age" th:if="${#fields.hasErrors('age')}" th:errors="*{age}" th:field="*{age}" type="number" min="0" placeholder="e.g. 3">
+      <input id="age" th:field="*{age}" type="number" min="0" placeholder="e.g. 3">
+      <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="validation-error"></span>
 
       <label for="description">Description</label>
-      <textarea id="description" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" th:field="*{description}" rows="3"
+      <textarea id="description" th:field="*{description}" rows="3"
                 placeholder="A short description of the animal's personality"></textarea>
 
-                  <label for="imageUrl">Image filename</label>
-                  <input id="imageUrl" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" th:field="*{imageUrl}" type="text"
+      <label for="imageUrl">Image filename</label>
+      <input id="imageUrl" th:field="*{imageUrl}" type="text"
                     placeholder="luna.jpg">
 
       <button type="submit">Add animal</button>

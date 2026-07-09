@@ -22,6 +22,11 @@ public class AnimalPageController {
         this.authentication = authentication;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("/")
     public String home(Model model) {
         boolean isAdmin = authentication.getAuthorities().stream()
